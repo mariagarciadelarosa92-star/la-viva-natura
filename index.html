@@ -138,7 +138,7 @@ function openPlantForm(id){
  document.body.insertAdjacentHTML('beforeend',formShell(p?'Edit plant':'Add a plant',`
  <form id="plantForm" onsubmit="savePlant(event,'${id||''}')">
  <div class="photoBox" id="plantPhotoPreview">${photo?`<img src="${photo}">`:'<label>📷 Add plant photo<input id="plantPhoto" type="file" accept="image/*" hidden onchange="previewImage(this)"></label>'}</div>
- ${photo?'<button type="button" class="secondary" onclick="document.getElementById(\\'plantPhoto\\').click()">Change photo</button><input id="plantPhoto" type="file" accept="image/*" hidden onchange="previewImage(this)">':''}
+ ${photo?`<button type="button" class="secondary" onclick="document.getElementById('plantPhoto').click()">Change photo</button><input id="plantPhoto" type="file" accept="image/*" hidden onchange="previewImage(this)">`:''}
  <div class="formgrid">
  <div class="field"><label>Plant name</label><input name="name" required value="${esc(p?.name||'')}"></div>
  <div class="field"><label>Status</label><select name="status">${['Healthy & happy','Flowering','Growing','Propagating','Needs attention','Recovering'].map(x=>`<option ${p?.status===x?'selected':''}>${x}</option>`).join('')}</select></div>
