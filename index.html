@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f5f0e4">
 <link rel="manifest" href="manifest.json">
 <title>La Viva Natura · Diario de Plantas</title>
-<meta name="app-version" content="3.0-es">
+<meta name="app-version" content="4.1-es">
 <style>
 :root{
   --paper:#f6f0e3;--paper2:#fbf7ee;--ink:#285447;--ink2:#48665d;
@@ -52,12 +52,12 @@ function today(){return new Date().toISOString().slice(0,10)}
 function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function load(){
   try{plants=JSON.parse(localStorage.getItem(KEY)||'[]'); journal=JSON.parse(localStorage.getItem(JKEY)||'[]')}catch(e){plants=[];journal=[]}
-  plants=plants.map(p=>({...p,id:p.id||uid(),events:p.events||[],propagations:p.propagations||[],health:p.health||[],photos:p.photos||[],wateringEvery:p.wateringEvery||7,status:p.status||'Healthy & happy'}));
+  plants=plants.map(p=>({...p,id:p.id||uid(),species:p.species||'',events:p.events||[],propagations:p.propagations||[],health:p.health||[],photos:p.photos||[],wateringEvery:p.wateringEvery||7,status:p.status||'Healthy & happy'}));
   if(!plants.length){
     plants=[
-      {id:uid(),name:'Monstera deliciosa',location:'Living room',light:'Bright indirect',status:'Healthy & happy',wateringEvery:7,notes:'',events:[{id:uid(),type:'Watered',date:today(),note:'First care log'}],propagations:[],health:[],photos:[]},
-      {id:uid(),name:'Hoya carnosa',location:'Bedroom',light:'Bright indirect',status:'Flowering',wateringEvery:10,notes:'',events:[],propagations:[],health:[],photos:[]},
-      {id:uid(),name:'Pothos',location:'Terrace',light:'Indirect',status:'Propagating',wateringEvery:7,notes:'',events:[],propagations:[{id:uid(),name:'Cutting 1',date:today(),method:'Water',medium:'Water',hormone:'No',changes:'',observations:'',status:'Rooting',photos:[]}],health:[],photos:[]}
+      {id:uid(),name:'Monstera del salón',species:'Monstera deliciosa',location:'Living room',light:'Bright indirect',status:'Healthy & happy',wateringEvery:7,notes:'',events:[{id:uid(),type:'Watered',date:today(),note:'First care log'}],propagations:[],health:[],photos:[]},
+      {id:uid(),name:'Hoya del dormitorio',species:'Hoya carnosa',location:'Bedroom',light:'Bright indirect',status:'Flowering',wateringEvery:10,notes:'',events:[],propagations:[],health:[],photos:[]},
+      {id:uid(),name:'Pothos de la terraza',species:'Epipremnum aureum',location:'Terrace',light:'Indirect',status:'Propagating',wateringEvery:7,notes:'',events:[],propagations:[{id:uid(),name:'Cutting 1',date:today(),method:'Water',medium:'Water',hormone:'No',changes:'',observations:'',status:'Rooting',photos:[]}],health:[],photos:[]}
     ];
     save();
   }
@@ -99,10 +99,10 @@ function home(){
   <div class="quickrow" onclick="go('journal')"><div class="qicon">🌱</div><div><strong>Momentos de crecimiento</strong><span>Guarda nuevas hojas, flores y pequeños cambios.</span></div></div>
  </div>`;
 }
-function plantCard(p){return `<div class="plant-card ${attention(p)?'due':''}" onclick="openDetail('${p.id}')"><div class="thumb">${plantThumb(p)}</div><div class="plant-info"><h4>${esc(p.name)}</h4><p>${esc(p.location||'Sin ubicación')} · ${esc(p.light||'Luz sin indicar')}</p></div><span class="pill ${attention(p)?'badgeAttention':''}">${attention(p)?'💧 Toca regar':esc(statusLabel(p.status))}</span></div>`}
+function plantCard(p){return `<div class="plant-card ${attention(p)?'due':''}" onclick="openDetail('${p.id}')"><div class="thumb">${plantThumb(p)}</div><div class="plant-info"><h4>${esc(p.name||'Planta sin nombre')}</h4><p>${esc(p.species||'Especie sin indicar')}</p><p>${esc(p.location||'Sin ubicación')} · ${esc(p.light||'Luz sin indicar')}</p></div><span class="pill ${attention(p)?'badgeAttention':''}">${attention(p)?'💧 Toca regar':esc(statusLabel(p.status))}</span></div>`}
 
 function plantsView(){
- const list=plants.filter(p=>(p.name+' '+p.location+' '+p.status).toLowerCase().includes(search.toLowerCase())).filter(p=>filter==='all'||p.status===filter);
+ const list=plants.filter(p=>(p.name+' '+(p.species||'')+' '+p.location+' '+p.status).toLowerCase().includes(search.toLowerCase())).filter(p=>filter==='all'||p.status===filter);
  const statuses=[...new Set(plants.map(p=>p.status).filter(Boolean))];
  return `<div class="sectionhead"><h3>Mi colección de plantas</h3></div>
  <div class="search"><input placeholder="Buscar plantas..." value="${esc(search)}" oninput="search=this.value;render()"><select class="filter" onchange="filter=this.value;render()"><option value="all">Todas</option>${statuses.map(s=>`<option value="${esc(s)}" ${filter===s?'selected':''}>${esc(statusLabel(s))}</option>`).join('')}</select></div>
@@ -120,8 +120,8 @@ function overlay(inner){return `<div class="overlay" onclick="if(event.target===
 function detailSheet(){
  const p=getPlant(selected); if(!p)return '';
  const tabs=[['summary','Resumen'],['care','Cuidados'],['growth','Crecimiento'],['health','Salud'],['prop','Propagación'],['journal','Diario']];
- return overlay(`<div class="sheethead"><h2>${esc(p.name)}</h2><button class="close" onclick="closeSheet()">×</button></div>
- <div class="detailHero"><div class="detailPhoto">${plantThumb(p,true)}</div><div><h2>${esc(p.name)}</h2><p>${esc(p.location||'Sin ubicación')} · ${esc(p.light||'Luz sin indicar')}</p><span class="pill">${esc(statusLabel(p.status))}</span></div></div>
+ return overlay(`<div class="sheethead"><h2>${esc(p.name||'Planta')}</h2><button class="close" onclick="closeSheet()">×</button></div>
+ <div class="detailHero"><div class="detailPhoto">${plantThumb(p,true)}</div><div><h2>${esc(p.name||'Planta')}</h2><p style="font-family:Georgia,serif;font-style:italic;margin-bottom:6px">${esc(p.species||'Especie sin indicar')}</p><p>${esc(p.location||'Sin ubicación')} · ${esc(p.light||'Luz sin indicar')}</p><span class="pill">${esc(statusLabel(p.status))}</span></div></div>
  <div class="tabs">${tabs.map(([k,l])=>`<button class="${detailTab===k?'active':''}" onclick="setDetailTab('${k}')">${l}</button>`).join('')}</div>
  ${detailTab==='summary'?profileSummary(p):''}
  ${detailTab==='care'?profileCare(p):''}
@@ -139,7 +139,7 @@ function profileSummary(p){
  <div class="stat"><strong>${p.health.length}</strong><span>registros de salud</span></div>
  </div>
  <div class="card ${attention(p)?'due':''}"><strong>💧 Ritmo de riego</strong><p style="color:#6e786f">Cada ${p.wateringEvery||7} días. ${n?(attention(p)?'Puede tocar riego hoy.':'Próximo riego: '+n):'Todavía no hay un riego registrado.'}</p><div class="actions"><button class="primary" onclick="quickWater('${p.id}')">💧 Regada hoy</button><button class="secondary" onclick="openCareForm('${p.id}')">Registrar cuidado</button></div></div>
- <div class="card"><strong>🌿 Sobre esta planta</strong><p style="color:#68766e">${esc(p.notes||'Aún no has añadido notas sobre esta planta.')}</p><button class="secondary" onclick="openPlantForm('${p.id}')">Editar perfil</button></div>
+ <div class="card"><strong>🌿 Sobre esta planta</strong><p style="font-family:Georgia,serif;font-style:italic;color:#68766e">${esc(p.species||'Especie sin indicar')}</p><p style="color:#68766e">${esc(p.notes||'Aún no has añadido notas sobre esta planta.')}</p><button class="secondary" onclick="openPlantForm('${p.id}')">Editar perfil</button></div>
  <div class="sectionhead"><h3>Últimos movimientos</h3><button class="linkbtn" onclick="setDetailTab('growth')">Ver historial →</button></div>
  <div class="timeline">${timeline(p).slice(0,4).join('')||'<div class="empty">Todavía no hay actividad registrada.</div>'}</div>
  <div class="sectionhead"><h3>Fotos</h3><button class="linkbtn" onclick="openPlantForm('${p.id}')">+ Foto</button></div>
@@ -191,7 +191,8 @@ function openPlantForm(id){
  <div class="photoBox" id="plantPhotoPreview">${photo?`<img src="${photo}">`:'<label>📷 Añadir foto de la planta<input id="plantPhoto" type="file" accept="image/*" hidden onchange="previewImage(this)"></label>'}</div>
  ${photo?`<button type="button" class="secondary" onclick="document.getElementById('plantPhoto').click()">Cambiar foto</button><input id="plantPhoto" type="file" accept="image/*" hidden onchange="previewImage(this)">`:''}
  <div class="formgrid">
- <div class="field"><label>Nombre de la planta</label><input name="name" required value="${esc(p?.name||'')}"></div>
+ <div class="field"><label>Nombre para identificarla</label><input name="name" required placeholder="Ej. Monstera del salón, Luna..." value="${esc(p?.name||'')}"></div>
+ <div class="field"><label>Especie</label><input name="species" placeholder="Ej. Monstera deliciosa" value="${esc(p?.species||'')}"></div>
  <div class="field"><label>Estado</label><select name="status">${['Healthy & happy','Flowering','Growing','Propagating','Needs attention','Recovering'].map(x=>`<option value="${esc(x)}" ${p?.status===x?'selected':''}>${esc(statusLabel(x))}</option>`).join('')}</select></div>
  <div class="field"><label>Ubicación</label><input name="location" value="${esc(p?.location||'')}"></div>
  <div class="field"><label>Luz</label><input name="light" value="${esc(p?.light||'')}"></div>
@@ -204,7 +205,7 @@ function openPlantForm(id){
 let pendingPhoto='';
 async function previewImage(input){if(!input.files?.[0])return;pendingPhoto=await compressImage(input.files[0]);document.getElementById('plantPhotoPreview').innerHTML=`<img src="${pendingPhoto}">`}
 function compressImage(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const max=1000,scale=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=img.width*scale;c.height=img.height*scale;c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};img.src=r.result};r.readAsDataURL(file)})}
-function savePlant(ev,id){ev.preventDefault();const f=new FormData(ev.target), old=id?getPlant(id):null;const p=old||{id:uid(),events:[],propagations:[],health:[],photos:[]};Object.assign(p,{name:f.get('name'),status:f.get('status'),location:f.get('location'),light:f.get('light'),wateringEvery:Number(f.get('wateringEvery'))||7,notes:f.get('notes')});if(pendingPhoto)p.photos=[pendingPhoto,...(p.photos||[]).slice(0,5)];if(!old)plants.unshift(p);pendingPhoto='';save();closeSheet();render();openDetail(p.id)}
+function savePlant(ev,id){ev.preventDefault();const f=new FormData(ev.target), old=id?getPlant(id):null;const p=old||{id:uid(),events:[],propagations:[],health:[],photos:[]};Object.assign(p,{name:f.get('name'),species:f.get('species'),status:f.get('status'),location:f.get('location'),light:f.get('light'),wateringEvery:Number(f.get('wateringEvery'))||7,notes:f.get('notes')});if(pendingPhoto)p.photos=[pendingPhoto,...(p.photos||[]).slice(0,5)];if(!old)plants.unshift(p);pendingPhoto='';save();closeSheet();render();openDetail(p.id)}
 function openCareForm(id){closeSheet();setTimeout(()=>document.body.insertAdjacentHTML('beforeend',formShell('Registrar cuidado',`<form onsubmit="saveCare(event,'${id}')"><div class="formgrid"><div class="field"><label>Tipo de cuidado</label><select name="type">${['Watered','Fertilized','Pruned','Rotated','Repotted','Leaves cleaned','Other'].map(x=>`<option value="${esc(x)}">${esc(eventLabel(x))}</option>`).join('')}</select></div><div class="field"><label>Fecha</label><input name="date" type="date" value="${today()}"></div><div class="field full"><label>Observación</label><textarea name="note" placeholder="¿Qué has observado?"></textarea></div></div><div class="actions"><button class="primary">Guardar evento</button></div></form>`)),10)}
 function saveCare(e,id){e.preventDefault();const p=getPlant(id),f=new FormData(e.target);p.events.unshift({id:uid(),type:f.get('type'),date:f.get('date'),note:f.get('note')});save();closeSheet();openDetail(id)}
 function quickWater(id){const p=getPlant(id);p.events.unshift({id:uid(),type:'Watered',date:today(),note:''});save();closeSheet();openDetail(id)}

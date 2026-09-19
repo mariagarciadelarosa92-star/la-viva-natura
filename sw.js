@@ -1,4 +1,4 @@
-const CACHE='lvn-es-clean-v2';
+const CACHE='lvn-es-profile-v4-1';
 const ASSETS=['./manifest.json'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
