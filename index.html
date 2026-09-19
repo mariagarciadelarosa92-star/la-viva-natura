@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#f5f0e4">
 <link rel="manifest" href="manifest.json">
 <title>La Viva Natura · Plant Journal</title>
+<meta name="app-version" content="2.1">
 <style>
 :root{
   --paper:#f6f0e3;--paper2:#fbf7ee;--ink:#285447;--ink2:#48665d;
@@ -168,7 +169,9 @@ function closeSheet(){document.querySelectorAll('.overlay').forEach(x=>x.remove(
 function deletePlant(id){if(confirm('Delete this plant?')){plants=plants.filter(p=>p.id!==id);save();closeSheet();render()}}
 function go(s){screen=s;selected=null;render()}
 load();render();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js?v=2.1').then(r=>r.update()).catch(()=>{});
+}
 </script>
 </body>
 </html>
