@@ -1,19 +1,17 @@
-# La Viva Natura · Plant Journal V1
+# La Viva Natura · Plant Journal V2
 
-PWA prototype inspired by the Plant Lover's Planner.
+Mobile-first PWA prototype for La Viva Natura.
 
-Includes:
-- Home dashboard
-- Plant collection
-- Add/edit/delete plants
-- Plant profiles
-- Care-event history
-- Botanical journal
-- Local persistence with localStorage
-- Mobile-first responsive design
-- PWA manifest and service worker
+V2 includes:
+- plant photos stored locally
+- plant collection search and filters
+- plant profiles
+- care events and watering due indicator
+- propagation records
+- plant health records
+- botanical journal
+- growth/care timeline
+- offline cache via service worker
+- localStorage persistence
 
-Run locally with a static server, for example:
-python3 -m http.server 8000
-
-Then open http://localhost:8000
+No account or cloud database yet. Data lives on the device/browser where the app is used.

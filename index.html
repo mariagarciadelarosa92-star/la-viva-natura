@@ -1,42 +1,174 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#244c3a"><link rel="manifest" href="manifest.json">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f0e4">
+<link rel="manifest" href="manifest.json">
 <title>La Viva Natura · Plant Journal</title>
 <style>
-:root{--bg:#f7f1e4;--paper:#fffaf0;--g:#244c3a;--s:#a9b99b;--ls:#e7ecdd;--b:#6e5848;--t:#b98262;--l:#d8d4c5}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--g);font-family:system-ui,-apple-system,sans-serif}.app{max-width:720px;margin:auto;padding-bottom:78px}
-header{padding:24px 18px 10px;display:flex;justify-content:space-between;align-items:center}.brand{font:27px Georgia,serif}.tag{font-size:11px;color:var(--b);font-style:italic}.plus,.secondary,.nav button{border:1px solid var(--l);background:var(--paper);color:var(--g);border-radius:13px}.plus{width:42px;height:42px;font-size:23px}
-main{padding:0 15px}.hero{margin:8px 0 15px;padding:21px;border:1px solid var(--l);border-radius:22px;background:linear-gradient(135deg,#e9eedf,#f9f1e1)}h1{font:23px Georgia,serif;margin:0 0 5px}.hero p{margin:0;color:var(--b);font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat,.card{background:var(--paper);border:1px solid var(--l);border-radius:17px}.stat{text-align:center;padding:12px}.stat b{display:block;font:23px Georgia,serif}.stat span{font-size:10px;color:#737b6e}
-.head{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 9px}.head h2{font:18px Georgia,serif;margin:0}.link{border:0;background:none;color:var(--t);font-size:12px}.card{padding:13px;margin-bottom:9px}
-.plant{display:flex;align-items:center;gap:12px}.pic{width:58px;height:58px;border-radius:15px;background:var(--ls);display:grid;place-items:center;font-size:29px;overflow:hidden}.pic img{width:100%;height:100%;object-fit:cover}.pname{font:17px Georgia,serif}.meta{font-size:11px;color:#737b6e;margin-top:3px}.pill{margin-left:auto;background:var(--ls);padding:6px 8px;border-radius:99px;font-size:10px;white-space:nowrap}.attention{background:#f4dfc7}.recover{background:#ead8d6}.prop{background:#dce7ea}.flower{background:#eee0ea}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#fffaf0f2;border-top:1px solid var(--l);z-index:4}.navin{max-width:720px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr)}.nav button{border:0;border-radius:0;background:none;padding:9px;font-size:10px}.nav button.active{font-weight:700}.nav i{display:block;font-style:normal;font-size:20px}
-.secondary{padding:9px 12px}.modal{display:none;position:fixed;inset:0;background:#244c3a55;z-index:10;align-items:flex-end}.modal.open{display:flex}.sheet{width:100%;max-width:620px;margin:auto;background:var(--paper);border-radius:24px 24px 0 0;padding:19px;max-height:90vh;overflow:auto}.sheettop{display:flex;justify-content:space-between}.sheet h2{font:22px Georgia,serif;margin:0 0 14px}.close{border:0;background:var(--ls);border-radius:50%;width:34px;height:34px}.form{display:grid;gap:10px}.field label{display:block;font-size:11px;color:#737b6e;margin-bottom:4px}.field input,.field textarea,.field select{width:100%;padding:11px;border:1px solid var(--l);border-radius:11px;background:#fffdf7;color:var(--g)}textarea{min-height:90px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.primary{border:0;background:var(--g);color:#fff;padding:12px;border-radius:12px;font-weight:700}.detail{display:flex;gap:14px;align-items:center;margin:12px 0 18px}.bigpic{width:86px;height:86px;border-radius:20px;background:var(--ls);display:grid;place-items:center;font-size:42px;overflow:hidden}.bigpic img{width:100%;height:100%;object-fit:cover}.event{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #e5e0d3}.event:last-child{border:0}.eventico{width:34px;height:34px;border-radius:10px;background:var(--ls);display:grid;place-items:center}.event small{display:block;color:#737b6e;margin-top:3px}.empty{text-align:center;color:#737b6e;padding:28px}.empty b{display:block;color:var(--g);font:20px Georgia,serif;margin-bottom:5px}
-</style></head>
+:root{
+  --paper:#f6f0e3;--paper2:#fbf7ee;--ink:#285447;--ink2:#48665d;
+  --muted:#7c8076;--line:#ddd6c7;--sage:#e8eee0;--sage2:#dce7d2;
+  --terra:#c98968;--white:#fffaf1;--danger:#9b5a51;--shadow:0 8px 24px rgba(55,70,50,.07);
+}
+*{box-sizing:border-box} html,body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+.app{max-width:900px;margin:auto;min-height:100vh;padding-bottom:92px}
+header{padding:28px 22px 14px;display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;background:rgba(246,240,227,.94);backdrop-filter:blur(12px);z-index:5}
+.brand h1{font-family:Georgia,serif;font-size:28px;margin:0 0 2px}.brand p{margin:0;color:#7c6659;font-style:italic;font-size:14px}
+.iconbtn{width:48px;height:48px;border:1px solid var(--line);border-radius:17px;background:var(--white);color:var(--ink);font-size:28px;box-shadow:var(--shadow)}
+main{padding:0 22px}.hero{background:linear-gradient(135deg,#e9eee0,#f8f1e3);border:1px solid #dcd7c8;border-radius:26px;padding:25px;margin:10px 0 18px}.hero h2{font:28px Georgia,serif;margin:0 0 6px}.hero p{margin:0;color:#77685e}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:16px;text-align:center}.stat strong{font:27px Georgia,serif;display:block}.stat span{font-size:12px;color:var(--muted)}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:25px 2px 10px}.sectionhead h3{font:22px Georgia,serif;margin:0}.linkbtn{border:0;background:none;color:var(--terra);padding:4px}
+.plant-card,.card{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:14px;margin:10px 0;box-shadow:var(--shadow)}
+.plant-card{display:flex;gap:14px;align-items:center}.thumb{width:78px;height:78px;border-radius:18px;background:var(--sage);display:grid;place-items:center;overflow:hidden;flex:none}.thumb img{width:100%;height:100%;object-fit:cover}.leaf{font-size:31px}.plant-info{min-width:0;flex:1}.plant-info h4{font:20px Georgia,serif;margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.plant-info p{margin:0;color:#7b8178;font-size:14px}.pill{display:inline-block;background:var(--sage);border-radius:999px;padding:7px 10px;font-size:12px;color:var(--ink2);white-space:nowrap}
+.quick{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:8px 16px}.quickrow{padding:13px 0;display:flex;gap:12px;align-items:center}.quickrow+.quickrow{border-top:1px solid var(--line)}.qicon{width:38px;height:38px;border-radius:13px;background:var(--sage);display:grid;place-items:center;font-size:20px}.quickrow strong{display:block}.quickrow span{color:var(--muted);font-size:13px}
+.search{display:flex;gap:8px;margin:14px 0}.search input{flex:1;padding:13px 15px;border:1px solid var(--line);border-radius:15px;background:var(--white);outline:none}.filter{padding:13px;border:1px solid var(--line);border-radius:15px;background:var(--white)}
+.empty{text-align:center;color:var(--muted);padding:35px 10px}.fab{position:fixed;right:22px;bottom:80px;width:58px;height:58px;border:0;border-radius:20px;background:var(--ink);color:white;font-size:28px;box-shadow:0 10px 25px rgba(40,84,71,.25)}
+nav{position:fixed;bottom:0;left:0;right:0;background:rgba(251,247,238,.96);backdrop-filter:blur(15px);border-top:1px solid var(--line);display:flex;justify-content:center;z-index:20}nav .navinner{max-width:900px;width:100%;display:grid;grid-template-columns:repeat(3,1fr)}nav button{border:0;background:none;color:#7c8178;padding:11px 4px 10px;font-size:11px}nav button.active{color:var(--ink);font-weight:700}nav .ni{display:block;font-size:21px;margin-bottom:2px}
+.overlay{position:fixed;inset:0;background:rgba(35,48,41,.38);z-index:30;display:flex;align-items:flex-end}.sheet{background:var(--paper2);width:100%;max-height:94vh;overflow:auto;border-radius:28px 28px 0 0;padding:20px 20px 35px}.sheethead{display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--paper2);z-index:2;padding-bottom:10px}.sheet h2{font:26px Georgia,serif;margin:0}.close{border:0;background:var(--sage);width:40px;height:40px;border-radius:13px;color:var(--ink)}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin:10px 0}.field.full{grid-column:1/-1}.field label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:13px;background:var(--white);padding:12px;outline:none}.field textarea{min-height:100px;resize:vertical}.actions{display:flex;gap:9px;margin-top:16px}.primary,.secondary,.danger{border:0;border-radius:14px;padding:12px 16px}.primary{background:var(--ink);color:white}.secondary{background:var(--sage);color:var(--ink)}.danger{background:#f0ded8;color:var(--danger)}
+.photoBox{height:190px;border:1px dashed #cfc7b5;border-radius:20px;background:var(--sage);display:grid;place-items:center;overflow:hidden;margin-bottom:12px}.photoBox img{width:100%;height:100%;object-fit:cover}.photoBox label{padding:12px 16px;background:var(--white);border:1px solid var(--line);border-radius:13px}
+.detailHero{display:flex;gap:15px;align-items:center;margin:5px 0 16px}.detailPhoto{width:105px;height:105px;border-radius:25px;background:var(--sage);overflow:hidden;display:grid;place-items:center;font-size:40px;flex:none}.detailPhoto img{width:100%;height:100%;object-fit:cover}.detailHero h2{font:27px Georgia,serif;margin:0 0 5px}.detailHero p{margin:0;color:var(--muted);font-size:14px}
+.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 9px}.tabs button{border:1px solid var(--line);background:var(--white);color:var(--ink2);border-radius:999px;padding:9px 12px;white-space:nowrap}.tabs button.active{background:var(--ink);color:white;border-color:var(--ink)}
+.timeline{position:relative;padding-left:22px}.timeline:before{content:"";position:absolute;left:7px;top:5px;bottom:5px;width:1px;background:var(--line)}.event{position:relative;margin:0 0 15px}.event:before{content:"";position:absolute;left:-19px;top:7px;width:9px;height:9px;border-radius:50%;background:var(--terra);border:3px solid var(--paper2)}.event strong{display:block}.event small{color:var(--muted)}.event p{margin:5px 0 0;color:#5f6d65;font-size:14px}
+.photoRow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.miniPhoto{aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--sage)}.miniPhoto img{width:100%;height:100%;object-fit:cover}
+.badgeAttention{background:#f1e2d8;color:#8b5c49}.due{border-left:4px solid var(--terra)}
+.hidden{display:none!important}
+@media(min-width:700px){.sheet{max-width:760px;margin:auto;border-radius:28px 28px 0 0}.overlay{align-items:center;padding:20px}.formgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
 <body>
-<div class="app"><header><div><div class="brand">La Viva Natura</div><div class="tag">Plant Journal · Care · Grow · Observe</div></div><button class="plus" onclick="addPlant()">＋</button></header><main id="main"></main></div>
-<nav class="nav"><div class="navin"><button id="nh" onclick="go('home')"><i>🏡</i>Home</button><button id="np" onclick="go('plants')"><i>🪴</i>Plants</button><button id="nj" onclick="go('journal')"><i>📖</i>Journal</button></div></nav>
-<div class="modal" id="modal"><div class="sheet"><div class="sheettop"><h2 id="mt"></h2><button class="close" onclick="closeM()">×</button></div><div id="mb"></div></div></div>
+<div id="app" class="app"></div>
 <script>
-const K='lvn-v1';let S=JSON.parse(localStorage.getItem(K)||'null')||{plants:[{id:1,name:'Monstera deliciosa',location:'Living room',light:'Bright indirect',status:'Healthy & happy',photo:'',notes:'Loves morning light.',events:[]},{id:2,name:'Hoya carnosa',location:'Bedroom',light:'Bright indirect',status:'Flowering',photo:'',notes:'Watch for new buds.',events:[]},{id:3,name:'Pothos',location:'Terrace',light:'Indirect',status:'Propagating',photo:'',notes:'Cutting in water.',events:[]}],journal:[]};let page='home',id=null;
-const save=()=>localStorage.setItem(K,JSON.stringify(S));const esc=x=>String(x||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));const cls=s=>s.includes('attention')?'attention':s.includes('recover')?'recover':s.includes('propagat')?'prop':s.includes('flower')?'flower':'';
-function go(p,i=null){page=p;id=i;render();document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.getElementById(p==='home'?'nh':p==='journal'?'nj':'np').classList.add('active')}
-function card(p){return `<div class="card" onclick="go('detail',${p.id})"><div class="plant"><div class="pic">${p.photo?`<img src="${p.photo}">`:'🌿'}</div><div><div class="pname">${esc(p.name)}</div><div class="meta">${esc(p.location)} · ${esc(p.light)}</div></div><span class="pill ${cls(p.status)}">${esc(p.status)}</span></div></div>`}
-function home(){let a=S.plants.filter(p=>p.status==='Needs attention').length,r=S.plants.filter(p=>p.status==='Propagating').length;return `<div class="hero"><h1>A little home for your green friends.</h1><p>Keep track of the plants you love, one small moment at a time.</p></div><div class="stats"><div class="stat"><b>${S.plants.length}</b><span>plants</span></div><div class="stat"><b>${a}</b><span>need attention</span></div><div class="stat"><b>${r}</b><span>propagating</span></div></div><div class="head"><h2>My Plants</h2><button class="link" onclick="go('plants')">View all →</button></div>${S.plants.slice(0,4).map(card).join('')||'<div class="card empty"><b>Your collection is waiting.</b>Add your first plant.</div>'}<div class="head"><h2>Quick care</h2></div><div class="card"><div class="event"><div class="eventico">💧</div><div><b>Care events</b><small>Open a plant to record watering, feeding, pruning and more.</small></div></div><div class="event"><div class="eventico">🌱</div><div><b>Growth moments</b><small>Use the journal whenever you notice something new.</small></div></div></div>`}
-function plants(){return `<div class="head"><h2>My Plant Collection</h2><button class="secondary" onclick="addPlant()">＋ Add plant</button></div>${S.plants.map(card).join('')||'<div class="card empty"><b>No plants yet.</b>Add your first green friend.</div>'}`}
-function detail(){let p=S.plants.find(x=>x.id===id);if(!p)return plants();return `<button class="link" onclick="go('plants')">← My plants</button><div class="detail"><div class="bigpic">${p.photo?`<img src="${p.photo}">`:'🌿'}</div><div><h1>${esc(p.name)}</h1><div class="meta">${esc(p.location)} · ${esc(p.light)}</div><span class="pill ${cls(p.status)}" style="display:inline-block;margin-top:8px">${esc(p.status)}</span></div></div><div class="card"><div class="head"><h2>Care history</h2><button class="link" onclick="care()">＋ Add care</button></div>${p.events.length?p.events.slice().reverse().map(e=>`<div class="event"><div class="eventico">${e.icon}</div><div><b>${esc(e.type)}</b><small>${esc(e.date)}${e.note?' · '+esc(e.note):''}</small></div></div>`).join(''):'<div class="empty">No care events yet.</div>'}</div><div class="card"><div class="head"><h2>Plant notes</h2></div><div class="meta" style="font-size:13px;color:var(--b)">${esc(p.notes||'Add observations about this plant.')}</div></div><div style="display:flex;gap:8px"><button class="secondary" onclick="editPlant()">Edit</button><button class="secondary" onclick="delPlant()">Delete</button></div>`}
-function journal(){return `<div class="head"><h2>Botanical Journal</h2><button class="secondary" onclick="newNote()">＋ New note</button></div>${S.journal.slice().reverse().map(j=>`<div class="card"><div class="event"><div class="eventico">${j.icon}</div><div><b>${esc(j.title)}</b><small>${esc(j.date)} · ${esc(j.plant||'Collection')}</small><div style="margin-top:7px;color:var(--b);font-size:13px">${esc(j.text)}</div></div></div></div>`).join('')||'<div class="card empty"><b>Today I noticed…</b>Record a new leaf, flower, light change, problem, or something beautiful.</div>'}`}
-function render(){document.getElementById('main').innerHTML=page==='plants'?plants():page==='detail'?detail():page==='journal'?journal():home()}go('home');
-function openM(t,b){mt.textContent=t;mb.innerHTML=b;modal.classList.add('open')}function closeM(){modal.classList.remove('open')}
-function addPlant(){openM('Add a plant',`<form class="form" onsubmit="savePlant(event)"><div class="field"><label>Plant name</label><input id="n" required placeholder="Monstera deliciosa"></div><div class="grid"><div class="field"><label>Location</label><input id="l" placeholder="Living room"></div><div class="field"><label>Light</label><select id="i"><option>Bright light</option><option selected>Bright indirect</option><option>Indirect</option><option>Low light</option></select></div></div><div class="field"><label>Status</label><select id="s"><option>Healthy & happy</option><option>Needs attention</option><option>In recovery</option><option>Propagating</option><option>Flowering</option></select></div><div class="field"><label>Notes</label><textarea id="o" placeholder="Anything you want to remember…"></textarea></div><button class="primary">Save plant</button></form>`)}
-function savePlant(e){e.preventDefault();S.plants.push({id:Date.now(),name:n.value,location:l.value||'Other',light:i.value,status:s.value,notes:o.value,photo:'',events:[]});save();closeM();go('plants')}
-function editPlant(){let p=S.plants.find(x=>x.id===id);openM('Edit plant',`<form class="form" onsubmit="updatePlant(event)"><div class="field"><label>Plant name</label><input id="n" required value="${esc(p.name)}"></div><div class="grid"><div class="field"><label>Location</label><input id="l" value="${esc(p.location)}"></div><div class="field"><label>Light</label><select id="i">${['Bright light','Bright indirect','Indirect','Low light'].map(x=>`<option ${x===p.light?'selected':''}>${x}</option>`).join('')}</select></div></div><div class="field"><label>Status</label><select id="s">${['Healthy & happy','Needs attention','In recovery','Propagating','Flowering'].map(x=>`<option ${x===p.status?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Notes</label><textarea id="o">${esc(p.notes)}</textarea></div><button class="primary">Save changes</button></form>`)}
-function updatePlant(e){e.preventDefault();let p=S.plants.find(x=>x.id===id);p.name=n.value;p.location=l.value;p.light=i.value;p.status=s.value;p.notes=o.value;save();closeM();render()}
-function delPlant(){if(confirm('Delete this plant?')){S.plants=S.plants.filter(x=>x.id!==id);save();go('plants')}}
-function care(){openM('Add care event',`<form class="form" onsubmit="saveCare(event)"><div class="field"><label>Care</label><select id="ct"><option>💧 Watered</option><option>🌱 Fertilized</option><option>✂️ Pruned</option><option>🧽 Cleaned leaves</option><option>🔄 Rotated</option><option>🪴 Repotted</option></select></div><div class="field"><label>Note</label><input id="cn" placeholder="Soil was dry…"></div><button class="primary">Save care event</button></form>`)}
-function saveCare(e){e.preventDefault();let p=S.plants.find(x=>x.id===id),v=ct.value;p.events.push({icon:v.slice(0,2),type:v.slice(2).trim(),date:new Date().toLocaleDateString('es-ES'),note:cn.value});save();closeM();render()}
-function newNote(){openM('New journal note',`<form class="form" onsubmit="saveNote(event)"><div class="grid"><div class="field"><label>What did you notice?</label><select id="ji"><option>🌱 New leaf</option><option>🌸 Flower</option><option>🍃 New growth</option><option>☀️ Light change</option><option>🩺 Problem</option><option>❤️ Something beautiful</option></select></div><div class="field"><label>Plant</label><select id="jp"><option value="">Collection</option>${S.plants.map(p=>`<option>${esc(p.name)}</option>`).join('')}</select></div></div><div class="field"><label>Observation</label><textarea id="jt" required placeholder="Today I noticed…"></textarea></div><button class="primary">Save note</button></form>`)}
-function saveNote(e){e.preventDefault();let v=ji.value;S.journal.push({icon:v.slice(0,2),title:v.slice(2).trim(),plant:jp.value,date:new Date().toLocaleDateString('es-ES'),text:jt.value});save();closeM();go('journal')}
-</script></body></html>
+const KEY='lvn_plants_v1';
+const JKEY='lvn_journal_v2';
+let plants=[], journal=[], screen='home', selected=null, search='', filter='all';
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function today(){return new Date().toISOString().slice(0,10)}
+function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function load(){
+  try{plants=JSON.parse(localStorage.getItem(KEY)||'[]'); journal=JSON.parse(localStorage.getItem(JKEY)||'[]')}catch(e){plants=[];journal=[]}
+  plants=plants.map(p=>({...p,id:p.id||uid(),events:p.events||[],propagations:p.propagations||[],health:p.health||[],photos:p.photos||[],wateringEvery:p.wateringEvery||7,status:p.status||'Healthy & happy'}));
+  if(!plants.length){
+    plants=[
+      {id:uid(),name:'Monstera deliciosa',location:'Living room',light:'Bright indirect',status:'Healthy & happy',wateringEvery:7,notes:'',events:[{id:uid(),type:'Watered',date:today(),note:'First care log'}],propagations:[],health:[],photos:[]},
+      {id:uid(),name:'Hoya carnosa',location:'Bedroom',light:'Bright indirect',status:'Flowering',wateringEvery:10,notes:'',events:[],propagations:[],health:[],photos:[]},
+      {id:uid(),name:'Pothos',location:'Terrace',light:'Indirect',status:'Propagating',wateringEvery:7,notes:'',events:[],propagations:[{id:uid(),name:'Cutting 1',date:today(),method:'Water',medium:'Water',hormone:'No',changes:'',observations:'',status:'Rooting',photos:[]}],health:[],photos:[]}
+    ];
+    save();
+  }
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(plants));localStorage.setItem(JKEY,JSON.stringify(journal))}
+function getPlant(id){return plants.find(p=>p.id===id)}
+function daysAgo(d){if(!d)return 999;return Math.floor((Date.now()-new Date(d+'T12:00:00'))/86400000)}
+function nextWater(p){let last=p.events.filter(e=>e.type==='Watered').sort((a,b)=>b.date.localeCompare(a.date))[0];if(!last)return null;return new Date(new Date(last.date+'T12:00:00').getTime()+p.wateringEvery*86400000).toISOString().slice(0,10)}
+function attention(p){let n=nextWater(p);return n && n<=today()}
+function plantThumb(p,large=false){return p.photos?.[0]?`<img src="${p.photos[0]}" alt="">`:`<span class="leaf">🌿</span>`}
+
+function render(){
+  const app=document.getElementById('app');
+  app.innerHTML=header()+main()+nav();
+}
+function header(){return `<header><div class="brand"><h1>La Viva Natura</h1><p>Plant Journal · Care · Grow · Observe</p></div><button class="iconbtn" onclick="openPlantForm()">+</button></header>`}
+function main(){return `<main>${screen==='home'?home():screen==='plants'?plantsView():journalView()}</main>${selected?detailSheet():''}`}
+function nav(){return `<nav><div class="navinner">
+<button class="${screen==='home'?'active':''}" onclick="go('home')"><span class="ni">⌂</span>Home</button>
+<button class="${screen==='plants'?'active':''}" onclick="go('plants')"><span class="ni">🪴</span>Plants</button>
+<button class="${screen==='journal'?'active':''}" onclick="go('journal')"><span class="ni">📖</span>Journal</button>
+</div></nav>`}
+
+function home(){
+ const att=plants.filter(attention).length, prop=plants.filter(p=>p.propagations.length).length;
+ const recent=[...plants].sort((a,b)=>(b.events?.[0]?.date||'').localeCompare(a.events?.[0]?.date||'')).slice(0,3);
+ return `<section class="hero"><h2>A little home for your green friends.</h2><p>Keep track of the plants you love, one small moment at a time.</p></section>
+ <div class="stats"><div class="stat"><strong>${plants.length}</strong><span>plants</span></div><div class="stat"><strong>${att}</strong><span>need attention</span></div><div class="stat"><strong>${prop}</strong><span>with propagation</span></div></div>
+ <div class="sectionhead"><h3>My Plants</h3><button class="linkbtn" onclick="go('plants')">View all →</button></div>
+ ${recent.map(plantCard).join('')||'<div class="empty">Add your first plant with the + button.</div>'}
+ <div class="sectionhead"><h3>Quick care</h3></div>
+ <div class="quick">
+  <div class="quickrow" onclick="go('plants')"><div class="qicon">💧</div><div><strong>Care events</strong><span>Water, feed, prune, rotate and more.</span></div></div>
+  <div class="quickrow" onclick="go('journal')"><div class="qicon">🌱</div><div><strong>Growth moments</strong><span>Capture new leaves, flowers and little changes.</span></div></div>
+ </div>`;
+}
+function plantCard(p){return `<div class="plant-card ${attention(p)?'due':''}" onclick="openDetail('${p.id}')"><div class="thumb">${plantThumb(p)}</div><div class="plant-info"><h4>${esc(p.name)}</h4><p>${esc(p.location||'No location')} · ${esc(p.light||'Light not set')}</p></div><span class="pill ${attention(p)?'badgeAttention':''}">${attention(p)?'💧 Due':esc(p.status)}</span></div>`}
+
+function plantsView(){
+ const list=plants.filter(p=>(p.name+' '+p.location+' '+p.status).toLowerCase().includes(search.toLowerCase())).filter(p=>filter==='all'||p.status===filter);
+ const statuses=[...new Set(plants.map(p=>p.status).filter(Boolean))];
+ return `<div class="sectionhead"><h3>My Plant Collection</h3></div>
+ <div class="search"><input placeholder="Search plants..." value="${esc(search)}" oninput="search=this.value;render()"><select class="filter" onchange="filter=this.value;render()"><option value="all">All</option>${statuses.map(s=>`<option ${filter===s?'selected':''}>${esc(s)}</option>`).join('')}</select></div>
+ ${list.map(plantCard).join('')||'<div class="empty">No plants match your search.</div>'}
+ <button class="fab" onclick="openPlantForm()">+</button>`;
+}
+
+function journalView(){
+ const entries=[...journal].sort((a,b)=>b.date.localeCompare(a.date));
+ return `<div class="sectionhead"><h3>Botanical Journal</h3><button class="secondary" onclick="openJournalForm()">+ Moment</button></div>
+ ${entries.map(e=>`<div class="card"><div style="display:flex;justify-content:space-between;gap:10px"><strong>${esc(e.title)}</strong><small>${esc(e.date)}</small></div><p style="margin:7px 0;color:#68766e">${esc(e.note||'')}</p>${e.photo?`<div class="miniPhoto" style="max-width:150px"><img src="${e.photo}"></div>`:''}<small>${esc(getPlant(e.plantId)?.name||'General journal')}</small></div>`).join('')||'<div class="empty">Your first botanical moment will appear here.</div>'}`;
+}
+
+function overlay(inner){return `<div class="overlay" onclick="if(event.target===this)closeSheet()"><div class="sheet">${inner}</div></div>`}
+function detailSheet(){
+ const p=getPlant(selected); if(!p)return '';
+ return overlay(`<div class="sheethead"><h2>${esc(p.name)}</h2><button class="close" onclick="closeSheet()">×</button></div>
+ <div class="detailHero"><div class="detailPhoto">${plantThumb(p,true)}</div><div><h2>${esc(p.name)}</h2><p>${esc(p.location||'')} · ${esc(p.light||'')}</p><span class="pill">${esc(p.status)}</span></div></div>
+ <div class="tabs"><button class="active">Overview</button><button onclick="openCareForm('${p.id}')">💧 Care</button><button onclick="openPropagationForm('${p.id}')">🌱 Propagate</button><button onclick="openHealthForm('${p.id}')">🩺 Health</button></div>
+ <div class="card"><strong>Care rhythm</strong><p style="color:#6e786f">Water every ${p.wateringEvery||7} days. ${nextWater(p)?(attention(p)?'💧 Water may be due.':'Next watering: '+nextWater(p)):'No watering date recorded yet.'}</p>
+ <div class="actions"><button class="primary" onclick="quickWater('${p.id}')">💧 Watered today</button><button class="secondary" onclick="openPlantForm('${p.id}')">Edit</button></div></div>
+ <div class="sectionhead"><h3>Timeline</h3><button class="linkbtn" onclick="openCareForm('${p.id}')">+ Event</button></div>
+ <div class="timeline">${timeline(p).join('')||'<div class="empty">No care events yet.</div>'}</div>
+ ${p.propagations.length?`<div class="sectionhead"><h3>Propagation</h3></div>${p.propagations.map(propCard).join('')}`:''}
+ ${p.health.length?`<div class="sectionhead"><h3>Health</h3></div>${p.health.map(healthCard).join('')}`:''}
+ <div class="sectionhead"><h3>Photos</h3></div>${p.photos?.length?`<div class="photoRow">${p.photos.map(x=>`<div class="miniPhoto"><img src="${x}"></div>`).join('')}</div>`:'<div class="empty">Add a plant photo when you edit the plant.</div>'}
+ <div class="actions"><button class="danger" onclick="deletePlant('${p.id}')">Delete plant</button></div>`);
+}
+function timeline(p){return [...(p.events||[])].sort((a,b)=>b.date.localeCompare(a.date)).map(e=>`<div class="event"><strong>${iconFor(e.type)} ${esc(e.type)}</strong><small>${esc(e.date)}</small>${e.note?`<p>${esc(e.note)}</p>`:''}</div>`)}
+function iconFor(t){return ({Watered:'💧',Fertilized:'🌿',Pruned:'✂️',Rotated:'↻',Repotted:'🪴','Leaves cleaned':'🍃',Other:'•'})[t]||'•'}
+function propCard(x){return `<div class="card"><strong>🌱 ${esc(x.name||'Propagation')}</strong><p>${esc(x.date||'')} · ${esc(x.method||'')} · ${esc(x.status||'')}</p>${x.observations?`<small>${esc(x.observations)}</small>`:''}</div>`}
+function healthCard(x){return `<div class="card"><strong>🩺 ${esc(x.issue)}</strong><p>${esc(x.date||'')} · ${esc(x.status||'Monitoring')}</p>${x.symptoms?`<p>${esc(x.symptoms)}</p>`:''}${x.treatment?`<small>Treatment: ${esc(x.treatment)}</small>`:''}</div>`}
+
+function formShell(title,body){return overlay(`<div class="sheethead"><h2>${title}</h2><button class="close" onclick="closeSheet()">×</button></div>${body}`)}
+function openPlantForm(id){
+ const p=id?getPlant(id):null;
+ selected=null;
+ const photo=p?.photos?.[0]||'';
+ document.body.insertAdjacentHTML('beforeend',formShell(p?'Edit plant':'Add a plant',`
+ <form id="plantForm" onsubmit="savePlant(event,'${id||''}')">
+ <div class="photoBox" id="plantPhotoPreview">${photo?`<img src="${photo}">`:'<label>📷 Add plant photo<input id="plantPhoto" type="file" accept="image/*" hidden onchange="previewImage(this)"></label>'}</div>
+ ${photo?'<button type="button" class="secondary" onclick="document.getElementById(\\'plantPhoto\\').click()">Change photo</button><input id="plantPhoto" type="file" accept="image/*" hidden onchange="previewImage(this)">':''}
+ <div class="formgrid">
+ <div class="field"><label>Plant name</label><input name="name" required value="${esc(p?.name||'')}"></div>
+ <div class="field"><label>Status</label><select name="status">${['Healthy & happy','Flowering','Growing','Propagating','Needs attention','Recovering'].map(x=>`<option ${p?.status===x?'selected':''}>${x}</option>`).join('')}</select></div>
+ <div class="field"><label>Location</label><input name="location" value="${esc(p?.location||'')}"></div>
+ <div class="field"><label>Light</label><input name="light" value="${esc(p?.light||'')}"></div>
+ <div class="field"><label>Water every (days)</label><input name="wateringEvery" type="number" min="1" max="60" value="${p?.wateringEvery||7}"></div>
+ <div class="field full"><label>Notes</label><textarea name="notes">${esc(p?.notes||'')}</textarea></div>
+ </div><div class="actions"><button class="primary" type="submit">Save plant</button><button class="secondary" type="button" onclick="closeSheet()">Cancel</button></div>
+ </form>`));
+ if(photo){document.getElementById('plantPhoto').addEventListener('change',previewImage)}
+}
+let pendingPhoto='';
+async function previewImage(input){if(!input.files?.[0])return;pendingPhoto=await compressImage(input.files[0]);document.getElementById('plantPhotoPreview').innerHTML=`<img src="${pendingPhoto}">`}
+function compressImage(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const max=1000,scale=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=img.width*scale;c.height=img.height*scale;c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};img.src=r.result};r.readAsDataURL(file)})}
+function savePlant(ev,id){ev.preventDefault();const f=new FormData(ev.target), old=id?getPlant(id):null;const p=old||{id:uid(),events:[],propagations:[],health:[],photos:[]};Object.assign(p,{name:f.get('name'),status:f.get('status'),location:f.get('location'),light:f.get('light'),wateringEvery:Number(f.get('wateringEvery'))||7,notes:f.get('notes')});if(pendingPhoto)p.photos=[pendingPhoto,...(p.photos||[]).slice(0,5)];if(!old)plants.unshift(p);pendingPhoto='';save();closeSheet();render();openDetail(p.id)}
+function openCareForm(id){closeSheet();setTimeout(()=>document.body.insertAdjacentHTML('beforeend',formShell('Record care',`<form onsubmit="saveCare(event,'${id}')"><div class="formgrid"><div class="field"><label>Care type</label><select name="type">${['Watered','Fertilized','Pruned','Rotated','Repotted','Leaves cleaned','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div><div class="field"><label>Date</label><input name="date" type="date" value="${today()}"></div><div class="field full"><label>Observation</label><textarea name="note" placeholder="What did you notice?"></textarea></div></div><div class="actions"><button class="primary">Save event</button></div></form>`)),10)}
+function saveCare(e,id){e.preventDefault();const p=getPlant(id),f=new FormData(e.target);p.events.unshift({id:uid(),type:f.get('type'),date:f.get('date'),note:f.get('note')});save();closeSheet();openDetail(id)}
+function quickWater(id){const p=getPlant(id);p.events.unshift({id:uid(),type:'Watered',date:today(),note:''});save();closeSheet();openDetail(id)}
+function openPropagationForm(id){closeSheet();setTimeout(()=>document.body.insertAdjacentHTML('beforeend',formShell('New propagation',`<form onsubmit="savePropagation(event,'${id}')"><div class="formgrid"><div class="field"><label>Name</label><input name="name" placeholder="Cutting 1"></div><div class="field"><label>Start date</label><input name="date" type="date" value="${today()}"></div><div class="field"><label>Method</label><select name="method"><option>Water</option><option>Soil</option><option>Sphagnum</option><option>Perlite</option><option>Air layering</option></select></div><div class="field"><label>Rooting hormone</label><select name="hormone"><option>No</option><option>Yes</option></select></div><div class="field"><label>Status</label><select name="status"><option>Starting</option><option>Rooting</option><option>Established</option><option>Failed</option></select></div><div class="field full"><label>Observations</label><textarea name="observations" placeholder="Water changes, roots, new growth..."></textarea></div></div><div class="actions"><button class="primary">Save propagation</button></div></form>`)),10)}
+function savePropagation(e,id){e.preventDefault();const p=getPlant(id),f=new FormData(e.target);p.propagations.unshift({id:uid(),name:f.get('name'),date:f.get('date'),method:f.get('method'),hormone:f.get('hormone'),status:f.get('status'),observations:f.get('observations'),photos:[]});save();closeSheet();openDetail(id)}
+function openHealthForm(id){closeSheet();setTimeout(()=>document.body.insertAdjacentHTML('beforeend',formShell('Plant health',`<form onsubmit="saveHealth(event,'${id}')"><div class="formgrid"><div class="field"><label>Issue</label><input name="issue" required placeholder="Yellow leaves, pests..."></div><div class="field"><label>Date</label><input name="date" type="date" value="${today()}"></div><div class="field full"><label>Symptoms</label><textarea name="symptoms"></textarea></div><div class="field full"><label>Treatment / change made</label><textarea name="treatment"></textarea></div><div class="field"><label>Status</label><select name="status"><option>Monitoring</option><option>Improving</option><option>Recovered</option><option>Ongoing</option></select></div></div><div class="actions"><button class="primary">Save health note</button></div></form>`)),10)}
+function saveHealth(e,id){e.preventDefault();const p=getPlant(id),f=new FormData(e.target);p.health.unshift({id:uid(),issue:f.get('issue'),date:f.get('date'),symptoms:f.get('symptoms'),treatment:f.get('treatment'),status:f.get('status')});save();closeSheet();openDetail(id)}
+function openJournalForm(){document.body.insertAdjacentHTML('beforeend',formShell('New botanical moment',`<form onsubmit="saveJournal(event)"><div class="formgrid"><div class="field"><label>Plant</label><select name="plantId"><option value="">General</option>${plants.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select></div><div class="field"><label>Date</label><input name="date" type="date" value="${today()}"></div><div class="field full"><label>What happened?</label><input name="title" required placeholder="A new leaf appeared"></div><div class="field full"><label>Notes</label><textarea name="note"></textarea></div></div><div class="actions"><button class="primary">Save moment</button></div></form>`))}
+function saveJournal(e){e.preventDefault();const f=new FormData(e.target);journal.unshift({id:uid(),plantId:f.get('plantId'),date:f.get('date'),title:f.get('title'),note:f.get('note')});save();closeSheet();go('journal')}
+function openDetail(id){selected=id;render()}
+function closeSheet(){document.querySelectorAll('.overlay').forEach(x=>x.remove());selected=null}
+function deletePlant(id){if(confirm('Delete this plant?')){plants=plants.filter(p=>p.id!==id);save();closeSheet();render()}}
+function go(s){screen=s;selected=null;render()}
+load();render();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
