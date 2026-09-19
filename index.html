@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f5f0e4">
 <link rel="manifest" href="manifest.json">
 <title>La Viva Natura · Diario de Plantas</title>
-<meta name="app-version" content="4.1-es">
+<meta name="app-version" content="4.3-es">
 <style>
 :root{
   --paper:#f6f0e3;--paper2:#fbf7ee;--ink:#285447;--ink2:#48665d;
@@ -38,13 +38,14 @@ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(251,247,238,.96);back
 .badgeAttention{background:#f1e2d8;color:#8b5c49}.due{border-left:4px solid var(--terra)}
 .hidden{display:none!important}
 @media(min-width:700px){.sheet{max-width:760px;margin:auto;border-radius:28px 28px 0 0}.overlay{align-items:center;padding:20px}.formgrid{grid-template-columns:1fr 1fr}}
+.dashboardHero{display:flex;justify-content:space-between;align-items:flex-start}.versionTag{font-size:10px;color:var(--muted);background:rgba(255,250,241,.65);border:1px solid var(--line);padding:5px 8px;border-radius:999px}.dashboardGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dashboardAction{margin:0;min-height:145px}.actionTop{display:flex;gap:11px;align-items:center;margin-bottom:8px}.bigIcon{width:42px;height:42px;border-radius:14px;background:var(--sage);display:grid;place-items:center;font-size:22px;flex:none}.actionTop strong{display:block;font-family:Georgia,serif;font-size:17px}.actionTop small{display:block;color:var(--muted);font-size:12px;margin-top:2px}.miniAction{width:100%;border:0;border-top:1px solid var(--line);background:none;padding:9px 0;display:flex;justify-content:space-between;gap:8px;text-align:left;color:var(--ink);font-size:13px}.miniAction small{color:var(--muted)}.dashboardEmpty{color:var(--muted);font-size:13px;padding:9px 0}.growthStrip{display:flex;gap:8px;overflow:auto;padding:10px}.growthItem{min-width:230px;border:0;background:transparent;display:flex;gap:10px;align-items:center;text-align:left;color:var(--ink);padding:5px}.growthItem strong{display:block;font-size:14px}.growthItem span{display:block;color:var(--muted);font-size:12px;margin-top:2px}@media(max-width:650px){.dashboardGrid{grid-template-columns:1fr}.dashboardAction{min-height:auto}}
 </style>
 </head>
 <body>
 <div id="app" class="app"></div>
 <script>
 const KEY='lvn_plants_v1';
-const APP_VERSION='V4.2';
+const APP_VERSION='V4.3';
 const JKEY='lvn_journal_v2';
 let plants=[], journal=[], screen='home', selected=null, search='', filter='all', detailTab='summary';
 
@@ -87,18 +88,36 @@ function nav(){return `<nav><div class="navinner">
 <button class="${screen==='journal'?'active':''}" onclick="go('journal')"><span class="ni">📖</span>Diario</button>
 </div></nav>`}
 
+function formatRelative(date){
+  if(!date)return 'Sin registrar';
+  const d=daysAgo(date);
+  if(d===0)return 'Hoy';
+  if(d===1)return 'Ayer';
+  if(d>1)return `Hace ${d} días`;
+  return date;
+}
+function dashboardWaterPlants(){return plants.filter(p=>attention(p)).sort((a,b)=>(nextWater(a)||'').localeCompare(nextWater(b)||''))}
+function dashboardHealthPlants(){return plants.filter(p=>(p.health||[]).some(h=>h.status!=='Recovered')).sort((a,b)=>((b.health?.[0]?.date||'')).localeCompare(a.health?.[0]?.date||''))}
+function dashboardPropagations(){return plants.filter(p=>p.propagations?.some(x=>x.status==='Rooting'||x.status==='Starting')).slice(0,4)}
 function home(){
- const att=plants.filter(attention).length, prop=plants.filter(p=>p.propagations.length).length;
- const recent=[...plants].sort((a,b)=>(b.events?.[0]?.date||'').localeCompare(a.events?.[0]?.date||'')).slice(0,3);
- return `<section class="hero"><h2>Un pequeño hogar para tus plantas.</h2><p>Registra las plantas que quieres y acompáñalas en cada pequeño momento.</p></section>
- <div class="stats"><div class="stat"><strong>${plants.length}</strong><span>plantas</span></div><div class="stat"><strong>${att}</strong><span>necesitan atención</span></div><div class="stat"><strong>${prop}</strong><span>en propagación</span></div></div>
- <div class="sectionhead"><h3>Mis plantas</h3><button class="linkbtn" onclick="go('plants')">Ver todas →</button></div>
- ${recent.map(plantCard).join('')||'<div class="empty">Añade tu primera planta con el botón +.</div>'}
- <div class="sectionhead"><h3>Cuidados rápidos</h3></div>
- <div class="quick">
-  <div class="quickrow" onclick="go('plants')"><div class="qicon">💧</div><div><strong>Cuidados</strong><span>Riega, abona, poda, gira la planta y mucho más.</span></div></div>
-  <div class="quickrow" onclick="go('journal')"><div class="qicon">🌱</div><div><strong>Momentos de crecimiento</strong><span>Guarda nuevas hojas, flores y pequeños cambios.</span></div></div>
- </div>`;
+ const due=dashboardWaterPlants(), health=dashboardHealthPlants(), props=dashboardPropagations();
+ const weekAgo=new Date(Date.now()-6*86400000).toISOString().slice(0,10);
+ const careWeek=plants.reduce((n,p)=>n+(p.events||[]).filter(e=>e.date>=weekAgo).length,0);
+ const attentionCount=due.length+health.filter(p=>!due.includes(p)).length;
+ const featured=[...plants].sort((a,b)=>(b.events?.[0]?.date||'').localeCompare(a.events?.[0]?.date||'')).slice(0,4);
+ return `<section class="hero dashboardHero"><div><h2>Buenos días 🌿</h2><p>Un vistazo a lo que tus plantas necesitan hoy.</p></div><span class="versionTag">${APP_VERSION}</span></section>
+ <div class="stats"><div class="stat"><strong>${plants.length}</strong><span>plantas</span></div><div class="stat"><strong>${attentionCount}</strong><span>para revisar</span></div><div class="stat"><strong>${careWeek}</strong><span>cuidados esta semana</span></div></div>
+ <div class="sectionhead"><h3>Para hoy</h3><button class="linkbtn" onclick="go('plants')">Ver plantas →</button></div>
+ <div class="dashboardGrid">
+  <div class="card dashboardAction ${due.length?'due':''}"><div class="actionTop"><span class="bigIcon">💧</span><div><strong>Riego pendiente</strong><small>${due.length?`${due.length} ${due.length===1?'planta necesita':'plantas necesitan'} agua`: 'No hay riegos pendientes'}</small></div></div>${due.slice(0,3).map(p=>`<button class="miniAction" onclick="openDetail('${p.id}')"><span>${esc(p.name)}</span><small>${nextWater(p)===today()?'Hoy':'Pendiente'}</small></button>`).join('')}${due.length>3?`<button class="linkbtn" onclick="go('plants')">Ver ${due.length-3} más →</button>`:''}</div>
+  <div class="card dashboardAction"><div class="actionTop"><span class="bigIcon">🩺</span><div><strong>Revisar salud</strong><small>${health.length?`${health.length} ${health.length===1?'planta en observación':'plantas en observación'}`:'Todo tranquilo'}</small></div></div>${health.slice(0,3).map(p=>`<button class="miniAction" onclick="openDetail('${p.id}');setTimeout(()=>setDetailTab('health'),0)"><span>${esc(p.name)}</span><small>Ver estado</small></button>`).join('')||'<div class="dashboardEmpty">No hay problemas abiertos.</div>'}</div>
+ </div>
+ <div class="sectionhead"><h3>En crecimiento</h3><button class="linkbtn" onclick="go('plants')">Ver todas →</button></div>
+ <div class="quick growthStrip">${props.map(p=>{const x=p.propagations.find(x=>x.status==='Rooting'||x.status==='Starting');return `<button class="growthItem" onclick="openDetail('${p.id}');setTimeout(()=>setDetailTab('prop'),0)"><span class="qicon">🌱</span><div><strong>${esc(p.name)}</strong><span>${esc(propagationStatusLabel(x.status))} · ${formatRelative(x.date)}</span></div></button>`}).join('')||'<div class="dashboardEmpty">Todavía no tienes propagaciones activas.</div>'}</div>
+ <div class="sectionhead"><h3>Tus plantas</h3><button class="linkbtn" onclick="go('plants')">Ver colección →</button></div>
+ ${featured.map(plantCard).join('')||'<div class="empty">Añade tu primera planta con el botón +.</div>'}
+ <div class="sectionhead"><h3>Acciones rápidas</h3></div>
+ <div class="quick"><div class="quickrow" onclick="openPlantForm()"><div class="qicon">🪴</div><div><strong>Añadir planta</strong><span>Incorpora una nueva planta a tu colección.</span></div></div><div class="quickrow" onclick="openJournalForm()"><div class="qicon">📖</div><div><strong>Guardar un momento</strong><span>Una hoja nueva, una flor o cualquier pequeño cambio.</span></div></div></div>`;
 }
 function plantCard(p){return `<div class="plant-card ${attention(p)?'due':''}" onclick="openDetail('${p.id}')"><div class="thumb">${plantThumb(p)}</div><div class="plant-info"><h4>${esc(p.name||'Planta sin nombre')}</h4><p>${esc(p.species||'Especie sin indicar')}</p><p>${esc(p.location||'Sin ubicación')} · ${esc(p.light||'Luz sin indicar')}</p></div><span class="pill ${attention(p)?'badgeAttention':''}">${attention(p)?'💧 Toca regar':esc(statusLabel(p.status))}</span></div>`}
 
