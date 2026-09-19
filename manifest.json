@@ -1,10 +1,10 @@
 {
-  "name": "La Viva Natura · Plant Journal",
+  "name": "La Viva Natura · Diario de Plantas",
   "short_name": "La Viva Natura",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f6f0e3",
   "theme_color": "#285447",
-  "description": "Un diario botánico acogedor para cuidar, observar y acompañar el crecimiento de tus plantas.",
+  "description": "Diario botánico para cuidar, observar y hacer crecer tus plantas.",
   "icons": []
 }

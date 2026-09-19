@@ -1,17 +1,12 @@
-# La Viva Natura · Plant Journal V2
+# La Viva Natura · Diario de Plantas (ES)
 
-Mobile-first PWA prototype for La Viva Natura.
+Versión 3.0 reconstruida desde la V2.1 funcional.
 
-V2 includes:
-- plant photos stored locally
-- plant collection search and filters
-- plant profiles
-- care events and watering due indicator
-- propagation records
-- plant health records
-- botanical journal
-- growth/care timeline
-- offline cache via service worker
-- localStorage persistence
+- Interfaz completamente en castellano.
+- Identificadores internos de JavaScript conservados en inglés para evitar errores de traducción.
+- Fotos locales, colección, búsqueda y filtros.
+- Perfil de planta, cuidados, propagación, salud y diario botánico.
+- Datos guardados en el navegador mediante localStorage.
+- Service worker con caché renovada.
 
-No account or cloud database yet. Data lives on the device/browser where the app is used.
+Esta versión no necesita servidor ni base de datos.
