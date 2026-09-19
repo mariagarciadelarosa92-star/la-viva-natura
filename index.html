@@ -32,7 +32,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(251,247,238,.96);back
 .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin:10px 0}.field.full{grid-column:1/-1}.field label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:13px;background:var(--white);padding:12px;outline:none}.field textarea{min-height:100px;resize:vertical}.actions{display:flex;gap:9px;margin-top:16px}.primary,.secondary,.danger{border:0;border-radius:14px;padding:12px 16px}.primary{background:var(--ink);color:white}.secondary{background:var(--sage);color:var(--ink)}.danger{background:#f0ded8;color:var(--danger)}
 .photoBox{height:190px;border:1px dashed #cfc7b5;border-radius:20px;background:var(--sage);display:grid;place-items:center;overflow:hidden;margin-bottom:12px}.photoBox img{width:100%;height:100%;object-fit:cover}.photoBox label{padding:12px 16px;background:var(--white);border:1px solid var(--line);border-radius:13px}
 .detailHero{display:flex;gap:15px;align-items:center;margin:5px 0 16px}.detailPhoto{width:105px;height:105px;border-radius:25px;background:var(--sage);overflow:hidden;display:grid;place-items:center;font-size:40px;flex:none}.detailPhoto img{width:100%;height:100%;object-fit:cover}.detailHero h2{font:27px Georgia,serif;margin:0 0 5px}.detailHero p{margin:0;color:var(--muted);font-size:14px}
-.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 9px}.tabs button{border:1px solid var(--line);background:var(--white);color:var(--ink2);border-radius:999px;padding:9px 12px;white-space:nowrap}.tabs button.active{background:var(--ink);color:white;border-color:var(--ink)}
+.profileGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 14px}.profileGrid .stat{padding:13px 8px}.profileGrid .stat strong{font-size:22px}.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 9px}.tabs button{border:1px solid var(--line);background:var(--white);color:var(--ink2);border-radius:999px;padding:9px 12px;white-space:nowrap}.tabs button.active{background:var(--ink);color:white;border-color:var(--ink)}
 .timeline{position:relative;padding-left:22px}.timeline:before{content:"";position:absolute;left:7px;top:5px;bottom:5px;width:1px;background:var(--line)}.event{position:relative;margin:0 0 15px}.event:before{content:"";position:absolute;left:-19px;top:7px;width:9px;height:9px;border-radius:50%;background:var(--terra);border:3px solid var(--paper2)}.event strong{display:block}.event small{color:var(--muted)}.event p{margin:5px 0 0;color:#5f6d65;font-size:14px}
 .photoRow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.miniPhoto{aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--sage)}.miniPhoto img{width:100%;height:100%;object-fit:cover}
 .badgeAttention{background:#f1e2d8;color:#8b5c49}.due{border-left:4px solid var(--terra)}
@@ -45,7 +45,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(251,247,238,.96);back
 <script>
 const KEY='lvn_plants_v1';
 const JKEY='lvn_journal_v2';
-let plants=[], journal=[], screen='home', selected=null, search='', filter='all';
+let plants=[], journal=[], screen='home', selected=null, search='', filter='all', detailTab='summary';
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -119,17 +119,62 @@ function journalView(){
 function overlay(inner){return `<div class="overlay" onclick="if(event.target===this)closeSheet()"><div class="sheet">${inner}</div></div>`}
 function detailSheet(){
  const p=getPlant(selected); if(!p)return '';
+ const tabs=[['summary','Resumen'],['care','Cuidados'],['growth','Crecimiento'],['health','Salud'],['prop','Propagación'],['journal','Diario']];
  return overlay(`<div class="sheethead"><h2>${esc(p.name)}</h2><button class="close" onclick="closeSheet()">×</button></div>
- <div class="detailHero"><div class="detailPhoto">${plantThumb(p,true)}</div><div><h2>${esc(p.name)}</h2><p>${esc(p.location||'')} · ${esc(p.light||'')}</p><span class="pill">${esc(p.status)}</span></div></div>
- <div class="tabs"><button class="active">Resumen</button><button onclick="openCareForm('${p.id}')">💧 Cuidados</button><button onclick="openPropagationForm('${p.id}')">🌱 Propagar</button><button onclick="openHealthForm('${p.id}')">🩺 Salud</button></div>
- <div class="card"><strong>Ritmo de cuidados</strong><p style="color:#6e786f">Riega cada ${p.wateringEvery||7} días. ${nextWater(p)?(attention(p)?'💧 Puede tocar riego.':'Próximo riego: '+nextWater(p)):'Todavía no hay una fecha de riego registrada.'}</p>
- <div class="actions"><button class="primary" onclick="quickWater('${p.id}')">💧 Regada hoy</button><button class="secondary" onclick="openPlantForm('${p.id}')">Editar</button></div></div>
- <div class="sectionhead"><h3>Historial</h3><button class="linkbtn" onclick="openCareForm('${p.id}')">+ Evento</button></div>
- <div class="timeline">${timeline(p).join('')||'<div class="empty">Todavía no hay cuidados registrados.</div>'}</div>
- ${p.propagations.length?`<div class="sectionhead"><h3>Propagación</h3></div>${p.propagations.map(propCard).join('')}`:''}
- ${p.health.length?`<div class="sectionhead"><h3>Salud</h3></div>${p.health.map(healthCard).join('')}`:''}
- <div class="sectionhead"><h3>Fotos</h3></div>${p.photos?.length?`<div class="photoRow">${p.photos.map(x=>`<div class="miniPhoto"><img src="${x}"></div>`).join('')}</div>`:'<div class="empty">Añade una foto de la planta al editarla.</div>'}
- <div class="actions"><button class="danger" onclick="deletePlant('${p.id}')">Eliminar planta</button></div>`);
+ <div class="detailHero"><div class="detailPhoto">${plantThumb(p,true)}</div><div><h2>${esc(p.name)}</h2><p>${esc(p.location||'Sin ubicación')} · ${esc(p.light||'Luz sin indicar')}</p><span class="pill">${esc(statusLabel(p.status))}</span></div></div>
+ <div class="tabs">${tabs.map(([k,l])=>`<button class="${detailTab===k?'active':''}" onclick="setDetailTab('${k}')">${l}</button>`).join('')}</div>
+ ${detailTab==='summary'?profileSummary(p):''}
+ ${detailTab==='care'?profileCare(p):''}
+ ${detailTab==='growth'?profileGrowth(p):''}
+ ${detailTab==='health'?profileHealth(p):''}
+ ${detailTab==='prop'?profilePropagation(p):''}
+ ${detailTab==='journal'?profileJournal(p):''}`);
+}
+function setDetailTab(tab){detailTab=tab;render()}
+function profileSummary(p){
+ const n=nextWater(p), events=p.events||[], last=events[0];
+ return `<div class="profileGrid">
+ <div class="stat"><strong>${events.length}</strong><span>cuidados registrados</span></div>
+ <div class="stat"><strong>${p.propagations.length}</strong><span>propagaciones</span></div>
+ <div class="stat"><strong>${p.health.length}</strong><span>registros de salud</span></div>
+ </div>
+ <div class="card ${attention(p)?'due':''}"><strong>💧 Ritmo de riego</strong><p style="color:#6e786f">Cada ${p.wateringEvery||7} días. ${n?(attention(p)?'Puede tocar riego hoy.':'Próximo riego: '+n):'Todavía no hay un riego registrado.'}</p><div class="actions"><button class="primary" onclick="quickWater('${p.id}')">💧 Regada hoy</button><button class="secondary" onclick="openCareForm('${p.id}')">Registrar cuidado</button></div></div>
+ <div class="card"><strong>🌿 Sobre esta planta</strong><p style="color:#68766e">${esc(p.notes||'Aún no has añadido notas sobre esta planta.')}</p><button class="secondary" onclick="openPlantForm('${p.id}')">Editar perfil</button></div>
+ <div class="sectionhead"><h3>Últimos movimientos</h3><button class="linkbtn" onclick="setDetailTab('growth')">Ver historial →</button></div>
+ <div class="timeline">${timeline(p).slice(0,4).join('')||'<div class="empty">Todavía no hay actividad registrada.</div>'}</div>
+ <div class="sectionhead"><h3>Fotos</h3><button class="linkbtn" onclick="openPlantForm('${p.id}')">+ Foto</button></div>
+ ${p.photos?.length?`<div class="photoRow">${p.photos.map(x=>`<div class="miniPhoto"><img src="${x}"></div>`).join('')}</div>`:'<div class="empty">Añade una foto para empezar a documentar su crecimiento.</div>'}
+ <div class="actions"><button class="danger" onclick="deletePlant('${p.id}')">Eliminar planta</button></div>`;
+}
+function profileCare(p){
+ return `<div class="sectionhead"><h3>Historial de cuidados</h3><button class="secondary" onclick="openCareForm('${p.id}')">+ Cuidado</button></div>
+ <div class="card"><strong>💧 Próximo riego</strong><p style="color:#68766e">${nextWater(p)?(attention(p)?'El riego está pendiente.':'Previsto para '+nextWater(p)):'Registra el primer riego para calcularlo.'}</p><button class="primary" onclick="quickWater('${p.id}')">💧 Regada hoy</button></div>
+ <div class="timeline">${timeline(p).join('')||'<div class="empty">Todavía no hay cuidados registrados.</div>'}</div>`;
+}
+function profileGrowth(p){
+ const all=[];
+ (p.events||[]).forEach(e=>all.push({date:e.date,icon:iconFor(e.type),title:eventLabel(e.type),note:e.note||'',kind:'Cuidado'}));
+ (p.propagations||[]).forEach(x=>all.push({date:x.date,icon:'🌱',title:'Propagación · '+(x.name||'Esqueje'),note:(methodLabel(x.method)+' · '+propagationStatusLabel(x.status)),kind:'Propagación'}));
+ (p.health||[]).forEach(x=>all.push({date:x.date,icon:'🩺',title:x.issue,note:(healthStatusLabel(x.status||'Monitoring')+(x.treatment?' · '+x.treatment:'')),kind:'Salud'}));
+ journal.filter(x=>x.plantId===p.id).forEach(x=>all.push({date:x.date,icon:'📖',title:x.title,note:x.note||'',kind:'Diario'}));
+ all.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ return `<div class="sectionhead"><h3>Historia de ${esc(p.name)}</h3></div><div class="card"><strong>🌿 Una pequeña historia, cuidado a cuidado.</strong><p style="color:#68766e;margin-bottom:0">Aquí se reúnen riegos, cambios, salud, propagaciones y momentos del diario para que puedas ver la evolución de tu planta.</p></div>
+ <div class="timeline">${all.map(x=>`<div class="event"><strong>${x.icon} ${esc(x.title)}</strong><small>${esc(x.date||'')} · ${esc(x.kind)}</small>${x.note?`<p>${esc(x.note)}</p>`:''}</div>`).join('')||'<div class="empty">Aún no hay momentos que mostrar.</div>'}</div>`;
+}
+function profileHealth(p){
+ return `<div class="sectionhead"><h3>Salud de la planta</h3><button class="secondary" onclick="openHealthForm('${p.id}')">+ Registro</button></div>
+ <div class="card"><strong>🩺 Seguimiento</strong><p style="color:#68766e">Registra síntomas, cambios, tratamientos y recuperación para poder consultar qué ocurrió con el tiempo.</p></div>
+ ${p.health.map(healthCard).join('')||'<div class="empty">Todavía no hay problemas de salud registrados.</div>'}`;
+}
+function profilePropagation(p){
+ return `<div class="sectionhead"><h3>Propagación</h3><button class="secondary" onclick="openPropagationForm('${p.id}')">+ Esqueje</button></div>
+ <div class="card"><strong>🌱 Sigue cada pequeño comienzo</strong><p style="color:#68766e">Guarda el método, fecha de inicio, hormona, observaciones y evolución de cada propagación.</p></div>
+ ${p.propagations.map(propCard).join('')||'<div class="empty">Todavía no hay propagaciones registradas.</div>'}`;
+}
+function profileJournal(p){
+ const entries=journal.filter(x=>x.plantId===p.id).sort((a,b)=>b.date.localeCompare(a.date));
+ return `<div class="sectionhead"><h3>Diario de ${esc(p.name)}</h3><button class="secondary" onclick="openJournalForm()">+ Momento</button></div>
+ ${entries.map(e=>`<div class="card"><div style="display:flex;justify-content:space-between;gap:10px"><strong>${esc(e.title)}</strong><small>${esc(e.date)}</small></div><p style="margin:7px 0;color:#68766e">${esc(e.note||'')}</p></div>`).join('')||'<div class="empty">Todavía no has guardado momentos de esta planta.</div>'}`;
 }
 function timeline(p){return [...(p.events||[])].sort((a,b)=>b.date.localeCompare(a.date)).map(e=>`<div class="event"><strong>${iconFor(e.type)} ${esc(eventLabel(e.type))}</strong><small>${esc(e.date)}</small>${e.note?`<p>${esc(e.note)}</p>`:''}</div>`)}
 function iconFor(t){return ({Watered:'💧',Fertilized:'🌿',Pruned:'✂️',Rotated:'↻',Repotted:'🪴','Leaves cleaned':'🍃',Other:'•'})[t]||'•'}
@@ -169,7 +214,7 @@ function openHealthForm(id){closeSheet();setTimeout(()=>document.body.insertAdja
 function saveHealth(e,id){e.preventDefault();const p=getPlant(id),f=new FormData(e.target);p.health.unshift({id:uid(),issue:f.get('issue'),date:f.get('date'),symptoms:f.get('symptoms'),treatment:f.get('treatment'),status:f.get('status')});save();closeSheet();openDetail(id)}
 function openJournalForm(){document.body.insertAdjacentHTML('beforeend',formShell('Nuevo momento botánico',`<form onsubmit="saveJournal(event)"><div class="formgrid"><div class="field"><label>Planta</label><select name="plantId"><option value="">General</option>${plants.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select></div><div class="field"><label>Fecha</label><input name="date" type="date" value="${today()}"></div><div class="field full"><label>¿Qué ha pasado?</label><input name="title" required placeholder="Ha aparecido una hoja nueva"></div><div class="field full"><label>Notas</label><textarea name="note"></textarea></div></div><div class="actions"><button class="primary">Guardar momento</button></div></form>`))}
 function saveJournal(e){e.preventDefault();const f=new FormData(e.target);journal.unshift({id:uid(),plantId:f.get('plantId'),date:f.get('date'),title:f.get('title'),note:f.get('note')});save();closeSheet();go('journal')}
-function openDetail(id){selected=id;render()}
+function openDetail(id){selected=id;detailTab='summary';render()}
 function closeSheet(){document.querySelectorAll('.overlay').forEach(x=>x.remove());selected=null}
 function deletePlant(id){if(confirm('¿Eliminar esta planta?')){plants=plants.filter(p=>p.id!==id);save();closeSheet();render()}}
 function go(s){screen=s;selected=null;render()}
