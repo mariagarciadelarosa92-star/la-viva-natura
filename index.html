@@ -44,6 +44,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(251,247,238,.96);back
 <div id="app" class="app"></div>
 <script>
 const KEY='lvn_plants_v1';
+const APP_VERSION='V4.2';
 const JKEY='lvn_journal_v2';
 let plants=[], journal=[], screen='home', selected=null, search='', filter='all', detailTab='summary';
 
@@ -220,7 +221,7 @@ function closeSheet(){document.querySelectorAll('.overlay').forEach(x=>x.remove(
 function deletePlant(id){if(confirm('¿Eliminar esta planta?')){plants=plants.filter(p=>p.id!==id);save();closeSheet();render()}}
 function go(s){screen=s;selected=null;render()}
 load();render();
-if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js?v=3.0-es-clean').then(r=>r.update()).catch(()=>{}); }
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js?v=4.2-es').then(r=>r.update()).catch(()=>{}); }
 </script>
 </body>
 </html>
