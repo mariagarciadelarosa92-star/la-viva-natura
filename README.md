@@ -1,12 +1,7 @@
-# La Viva Natura · Diario de Plantas (ES)
+# La Viva Natura · Diario de Plantas V5
 
-Versión 3.0 reconstruida desde la V2.1 funcional.
+Aplicación web progresiva en castellano para gestionar una colección personal de plantas.
 
-- Interfaz completamente en castellano.
-- Identificadores internos de JavaScript conservados en inglés para evitar errores de traducción.
-- Fotos locales, colección, búsqueda y filtros.
-- Perfil de planta, cuidados, propagación, salud y diario botánico.
-- Datos guardados en el navegador mediante localStorage.
-- Service worker con caché renovada.
+Incluye colección, perfiles individuales, cuidados, riego, salud, propagación, crecimiento, diario botánico, calendario, guía estacional, notas y copia de seguridad local.
 
-Esta versión no necesita servidor ni base de datos.
+Los datos se guardan localmente en el navegador. Usa **Ajustes → Exportar datos** para crear una copia de seguridad.
